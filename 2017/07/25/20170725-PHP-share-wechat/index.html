@@ -1,0 +1,52 @@
+<!DOCTYPE html><html lang="null"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>20170725-PHP自定义微信分享 | Fiona's Blog</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=0.0.0"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/normalize/6.0.0/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/pure-min.css"><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/pure/0.6.2/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">20170725-PHP自定义微信分享</h1><a id="logo" href="/.">Fiona's Blog</a><p class="description"></p></div><div id="nav-menu"><a href="/." class="current"><i class="fa fa-home"> Start</i></a><a href="/archives/"><i class="fa fa-archive"> Archiv</i></a><a href="/about/"><i class="fa fa-user"> Über</i></a><a href="/atom.xml"><i class="fa fa-rss"> RSS</i></a></div></div><div id="layout" class="pure-g"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">20170725-PHP自定义微信分享</h1><div class="post-meta">Jul 25, 2017<script src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js" async></script><span id="busuanzi_container_page_pv"> | <span id="busuanzi_value_page_pv"></span><span> Hits</span></span></div><div class="post-content"><p>工作需要，需要支持页面的微信自定义分享。查阅了一些资料后整理如下。最详尽的资料在微信官方文档<a href="https://mp.weixin.qq.com/wiki?t=resource/res_main&amp;id=mp1421141115" target="_blank" rel="external">微信公众平台</a>，下面是针对PHP微信分享的小结和整理。</p>
+<h2 id="前置条件"><a href="#前置条件" class="headerlink" title="前置条件"></a>前置条件</h2><h4 id="公众号支持微信自定义分享功能；"><a href="#公众号支持微信自定义分享功能；" class="headerlink" title="公众号支持微信自定义分享功能；"></a>公众号支持微信自定义分享功能；</h4><p>首先要确保公众号支持自定义分享功能，具不完全考证，目前（2017.7）微信只支持认证过的公众号有分享功能。查看有无该功能，可在【开发】-【接口权限】中查看。 如图1和图2。</p>
+<p><img src="01.png" alt=""><br>【图1】<br><img src="02.png" alt=""><br>                                【图2】</p>
+<h4 id="公众号添加域名"><a href="#公众号添加域名" class="headerlink" title="公众号添加域名"></a>公众号添加域名</h4><p><img src="03.png" alt=""><br>                            【图3】</p>
+<p>如图3，在【设置】-【公众号设置】的【功能设置】Tab页面，选择JS接口安全域名设置。</p>
+<p><img src="04.png" alt=""><br>                            【图4】</p>
+<p>在添加JS接口前，如图4，弹出的画面会提醒在域名根目录下添加文件，下载超链接的文件后上传至服务器，并确保路径可以访问后，再添加域名（注域名不带http:， 如<a href="http://www.baidu.com" target="_blank" rel="external">http://www.baidu.com</a> 应填写为 www.baidu.com）。</p>
+<p>如果可以访问成功且域名有效，便可进行保存。同时会提示将服务器IP添加至白名单，按照提示可添加白名单，如果当时不确定IP地址，也可稍后再条件。</p>
+<h4 id="IP白名单添加"><a href="#IP白名单添加" class="headerlink" title="IP白名单添加"></a>IP白名单添加</h4><ol>
+<li><p>获取IP地址</p>
+<ul>
+<li><p>如果已经登录了服务器，可以在命令行输入ifconfig查看本机IP，eth1的inet addr项，如图5。</p>
+<p><img src="05.png" alt=""></p>
+<pre><code>【图5】
+</code></pre></li>
+<li><p>如果没有登录服务器，可以通过Ping服务器的方式获取服务器IP。如图6。</p>
+<p><img src="06.png" alt=""></p>
+<pre><code>【图6】
+</code></pre></li>
+</ul>
+</li>
+<li><p>设置白名单<br>在【设置】-【安全中心】里面，选择IP白名单，查看，进行编辑，如图7和图8。</p>
+</li>
+</ol>
+<p><img src="07.png" alt=""><br>                            【图7】</p>
+<p><img src="08.png" alt=""><br>                            【图8】</p>
+<h2 id="代码部分"><a href="#代码部分" class="headerlink" title="代码部分"></a>代码部分</h2><ol>
+<li><p>代码目录结构<br>示例代码给的结构前端PHP和后端处理代码在同一个目录结构下，实际项目中可根据需求进行修改。图9是一个示例：<br><img src="09.png" alt=""></p>
+<pre><code>【图9】
+</code></pre></li>
+<li><p>后台代码</p>
+<p> 后台代码是示例代码的jssdk.php文件，里面向微信请求了access_token和ticket，微信示例代码中，将请求的结果写在文件里面进行缓存，每次调用分享时，从文件中读取有效时间，如果超时再重新请求。</p>
+</li>
+<li><p>前台代码</p>
+<ol>
+<li><p>appId和appSecret替换</p>
+<p>前台代码是示例中的sample.php，其中需要注意的是appId，和appSecrect需要进行替换。appId在微信公众平台【设置】-【基本配置】里面，如图10，图11。</p>
+<p><img src="10.png" alt=""></p>
+<pre><code>【图10】
+</code></pre><p><img src="11.png" alt=""></p>
+<pre><code>【图11】
+</code></pre></li>
+<li><p>代码部分，如图12。</p>
+<p>第一步需要替换appId和appSecret，第二步需要填充自己需要的apilist，第三步是设置分享的调用函数。注意下面的代码是开了debug的，如果最终在正式环境上调用，需要把config.debug 设置为false。</p>
+<p><img src="12.png" alt=""><br>【图12】</p>
+</li>
+</ol>
+</li>
+</ol>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p>以上就是最基础的PHP微信分享步骤，希望有所帮助。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="https://mp.weixin.qq.com/wiki?t=resource/res_main&amp;id=mp1421141115" target="_blank" rel="external">微信公众平台</a><br><a href="https://segmentfault.com/a/1190000004004709" target="_blank" rel="external">微信公众平台JSSDK分享接口开发（PHP实现） - w2ex - SegmentFault</a><br><a href="http://www.thinkphp.cn/code/2738.html" target="_blank" rel="external">PHP实现微信分享朋友圈demo</a></p>
+</div><script type="text/javascript" src="/js/share.js?v=0.0.0" async></script><a data-url="https://fionafromchina.github.io/2017/07/25/20170725-PHP-share-wechat/" data-id="cj5izg4690000g6fy1qk5wsfr" class="article-share-link">Aktie</a><div class="tags"><a href="/tags/PHP-微信/">PHP;微信</a></div><div class="post-nav"><a href="/2017/07/25/20170722-MacOS-can-not-open-software/" class="next">20170725-PHP自定义微信分享</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank" class="search-form"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="https://fionafromchina.github.io"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> Kategorien</i></div></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> Tags</i></div><div class="tagcloud"><a href="/tags/开发/" style="font-size: 15px;">开发</a> <a href="/tags/blog/" style="font-size: 15px;">blog</a> <a href="/tags/学习-transform/" style="font-size: 15px;">学习;transform;</a> <a href="/tags/PHP-微信/" style="font-size: 15px;">PHP;微信</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> Letzte</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/07/25/20170725-PHP-share-wechat/">20170725-PHP自定义微信分享</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/25/20170722-MacOS-can-not-open-software/">20170725-PHP自定义微信分享</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/12/20170412-compass/">20170412-compass</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/11/20170411-multi-line-add-prefix/">multi-line-add-prefix</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/08/js-event/">js-event</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/08/php-init/">php-init</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/08/font-knowledge-sumary/">font-knowledge-sumary</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/08/publish-blog/">publish-blog</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/08/20170408/">动画效果</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/01/20170401/">wget命令.md</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-external-link"> Blogroll</i></div><ul></ul><a href="http://www.example1.com/" title="site-name1" target="_blank">site-name1</a><ul></ul><a href="http://www.example2.com/" title="site-name2" target="_blank">site-name2</a><ul></ul><a href="http://www.example3.com/" title="site-name3" target="_blank">site-name3</a></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">© <a href="/." rel="nofollow">Fiona's Blog.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a id="rocket" href="#top" class="show"></a><script type="text/javascript" src="/js/totop.js?v=0.0.0" async></script><script type="text/javascript" src="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=0.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/fancybox/3.0.47/jquery.fancybox.min.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=0.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=0.0.0"></script></div></body></html>
